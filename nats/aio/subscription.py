@@ -331,7 +331,10 @@ class Subscription:
                 if self._max_msgs > 0 and self._received >= self._max_msgs and self._pending_queue.empty:
                     self._stop_processing()
             except asyncio.CancelledError:
-                break
+                if self._closed:
+                    break
+                else:
+                    continue
 
 
 class _SubscriptionMessageIterator:

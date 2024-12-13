@@ -947,8 +947,11 @@ class JetStreamContext(JetStreamManager):
             """
             Unsubscribes from a subscription, canceling any heartbeat and flow control tasks,
             and optionally limits the number of messages to process before unsubscribing.
+            Nothing is really subscribed from this object, call unsubscribe on underlying sub
+            and forward _closed flag.
             """
-            await super().unsubscribe(limit)
+            await self._sub.unsubscribe(limit)
+            self._closed = self._sub._closed
 
             if self._sub._jsi._hbtask:
                 self._sub._jsi._hbtask.cancel()
