@@ -219,7 +219,8 @@ class Msg:
             tokens = cls._get_metadata_fields(reply)
             if len(tokens) == _V1_TOKEN_COUNT:
                 t = datetime.datetime.fromtimestamp(
-                    int(tokens[7]) / 1_000_000_000.0
+                    int(tokens[7]) / 1_000_000_000.0,
+                    datetime.timezone.utc
                 )
                 return cls(
                     sequence=Msg.Metadata.SequencePair(
@@ -234,7 +235,8 @@ class Msg:
                 )
             else:
                 t = datetime.datetime.fromtimestamp(
-                    int(tokens[Msg.Ack.Timestamp]) / 1_000_000_000.0
+                    int(tokens[Msg.Ack.Timestamp]) / 1_000_000_000.0,
+                    datetime.timezone.utc
                 )
 
                 # Underscore indicate no domain is set. Expose as empty string
